@@ -1,0 +1,12 @@
+{
+    "name": "hasplayer",
+    "version": "0.0.0",
+    "main": [
+        "dist/hasplayer.js"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/maxdome/hasplayer.js.git"
+    },
+    "private": true
+}

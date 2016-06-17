@@ -71,10 +71,11 @@ MediaPlayer.models.ProtectionModel_01b = function () {
             return {
                 handleEvent: function(event) {
                     var sessionToken = null;
+                    $('#mxd-content-player').append('DRM: 01b: videoElement event:' + event.type);
                     switch (event.type) {
 
                         case api.needkey:
-                            var initData = ArrayBuffer.isView(event.initData) ? event.initData.buffer : event.initData;
+                            var initData = event.initData.buffer;
                             self.notify(MediaPlayer.models.ProtectionModel.eventList.ENAME_NEED_KEY,
                                 new MediaPlayer.vo.protection.NeedKey(initData, "cenc"));
                             break;
@@ -166,7 +167,7 @@ MediaPlayer.models.ProtectionModel_01b = function () {
                             }
 
                             if (sessionToken) {
-                                var message = ArrayBuffer.isView(event.message) ? event.message.buffer : event.message;
+                                var message =event.message.buffer;
 
                                 // For ClearKey, the spec mandates that you pass this message to the
                                 // addKey method, so we always save it to the token since there is no
@@ -394,8 +395,17 @@ MediaPlayer.models.ProtectionModel_01b = function () {
             var sessionID = sessionToken.sessionID;
             if (!this.protectionExt.isClearKey(this.keySystem)) {
                 // Send our request to the CDM
-                videoElement[api.addKey](this.keySystem.systemString,
-                        new Uint8Array(message), sessionToken.initData, sessionID);
+                //videoElement[api.addKey](this.keySystem.systemString,
+                //        new Uint8Array(message), sessionToken.initData, sessionID);
+                $('#mxd-content-player').append('[DRM] updateKeySession:');
+                $('#mxd-content-player').append('[DRM] sessionID:' + sessionID);
+                videoElement.addKey(
+                    'com.microsoft.playready',
+                    new Uint8Array(message),
+                    new Uint8Array(sessionToken.initData),
+                    sessionID
+                )
+                //event.target.webkitAddKey('com.widevine.alpha', new Uint8Array(xhr.response), event.initData, event.sessionId);
             } else {
                 // For clearkey, message is a MediaPlayer.vo.protection.ClearKeyKeySet
                 for (var i = 0; i < message.keyPairs.length; i++) {

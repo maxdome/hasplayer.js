@@ -69,7 +69,7 @@ MediaPlayer.utils.Debug = function () {
         DEBUG = 4,
         ALL   = 4,
         level = 0,
-        showTimestamp = true,
+        showTimestamp = false,
         showElapsedTime = false,
         startTime = new Date(),
         // default logger set to console
@@ -183,7 +183,7 @@ MediaPlayer.utils.Debug = function () {
                 break;
 
                 default:
-                    _logger = null;
+                    _logger = type;
            }
         },
 

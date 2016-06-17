@@ -40,7 +40,7 @@ MediaPlayer.dependencies.protection.KeySystem_PlayReady = function() {
 
     var keySystemStr = "com.microsoft.playready",
         keySystemUUID = "9a04f079-9840-4286-ab92-e65be0885f95",
-        messageFormat = "utf16",
+        messageFormat = "utf8",
         PRCDMData = '<PlayReadyCDMData type="LicenseAcquisition"><LicenseAcquisition version="1.0" Proactive="true"><CustomData encoding="base64encoded">%CUSTOMDATA%</CustomData></LicenseAcquisition></PlayReadyCDMData>',
         protData,
 
@@ -53,7 +53,7 @@ MediaPlayer.dependencies.protection.KeySystem_PlayReady = function() {
                 headerNameList,
                 headerValueList,
                 i = 0;
-
+/*
             msg = String.fromCharCode.apply(null, dataview);
             xmlDoc = this.domParser.createXmlTree(msg);
 
@@ -76,6 +76,9 @@ MediaPlayer.dependencies.protection.KeySystem_PlayReady = function() {
             if (!headers.hasOwnProperty('Content-Type')) {
                 headers['Content-Type'] = 'text/xml; charset=utf-8';
             }
+*/
+            headers['Content-Type'] = 'text/xml; charset=utf-8';
+            headers['SOAPAction'] = 'http://schemas.microsoft.com/DRM/2007/03/protocols/AcquireLicense';
 
             return headers;
         },

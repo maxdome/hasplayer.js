@@ -227,7 +227,7 @@ MediaPlayer.dependencies.ProtectionExtensions.prototype = {
 
         for (ksIdx = 0; ksIdx < this.keySystems.length; ++ksIdx) {
             if (this.keySystems[ksIdx].uuid in pssh) {
-                //this.debug.log("[DRM] Add supported key system: " + this.keySystems[ksIdx].systemString);
+                this.debug.log("[DRM] Add supported key system: " + this.keySystems[ksIdx].systemString);
                 supportedKS.push({
                     ks: this.keySystems[ksIdx],
                     initData: pssh[this.keySystems[ksIdx].uuid]

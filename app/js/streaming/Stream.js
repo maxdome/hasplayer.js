@@ -430,7 +430,7 @@ MediaPlayer.dependencies.Stream = function() {
                 code,
                 message = "[Stream] <video> error: ";
 
-            if (error.code === -1) {
+            if (!error || error.code === -1) {
                 // not an error!
                 return;
             }

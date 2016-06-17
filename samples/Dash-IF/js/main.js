@@ -927,6 +927,7 @@ app.controller('DashController', ['$scope', '$window', 'Sources', 'Notes','Contr
         player.setInitialQualityFor("audio", 0);
 
         $scope.playbackRate = "x1";
+        console.log('### load player:', $scope.selectedItem);
         player.load($scope.selectedItem);
     }
 

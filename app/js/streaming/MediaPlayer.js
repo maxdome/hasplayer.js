@@ -136,7 +136,7 @@ MediaPlayer = function () {
                 this.debug.log("[MediaPlayer] ManifestReady");
                 videoBitrates = this.metricsExt.getBitratesForType('video');
                 this.debug.log("[MediaPlayer] video bitrates: " + JSON.stringify(videoBitrates));
-                event = document.createEvent("CustomEvent");
+                var event = document.createEvent("CustomEvent");
                 event.initCustomEvent('manifest_loaded', false, false, {});
                 videoModel.getElement().dispatchEvent(event);
                 break;
@@ -469,7 +469,10 @@ MediaPlayer = function () {
                 this.debug.log("[MediaPlayer] Version: " + this.getVersionFull() + " - " + this.getBuildDate());
                 this.debug.log("[MediaPlayer] user-agent: " + navigator.userAgent);
             }
+            console.log('#### init videoModel');
             videoModel = system.getObject('videoModel');
+            console.log(videoModel);
+            console.log(video);
             videoModel.setElement(video);
 
             // in case of init is called another time

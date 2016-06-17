@@ -57,11 +57,12 @@ MediaPlayer.models.ProtectionModel_3Feb2014 = function () {
             var self = this;
             return {
                 handleEvent: function(event) {
+                    $('#mxd-content-player').append('DRM: 3Feb2014: videoElement event:' + event.type);
                     switch (event.type) {
 
                         case api.needkey:
                             if (event.initData) {
-                                var initData = ArrayBuffer.isView(event.initData) ? event.initData.buffer : event.initData;
+                                var initData = event.initData.buffer;
                                 self.notify(MediaPlayer.models.ProtectionModel.eventList.ENAME_NEED_KEY,
                                         new MediaPlayer.vo.protection.NeedKey(initData, "cenc"));
                             }
@@ -93,31 +94,33 @@ MediaPlayer.models.ProtectionModel_3Feb2014 = function () {
         getKeyError = function(event) {
             var code = MediaPlayer.dependencies.ErrorHandler.prototype.MEDIA_KEYERR,
                 msg = "MediakeyError";
-            switch (event.errorCode.code) {
-                case 1:
-                    code = MediaPlayer.dependencies.ErrorHandler.prototype.MEDIA_KEYERR_UNKNOWN;
-                    msg = "An unspecified error occurred. This value is used for errors that don't match any of the other codes.";
-                    break;
-                case 2:
-                    code = MediaPlayer.dependencies.ErrorHandler.prototype.MEDIA_KEYERR_CLIENT;
-                    msg = "The Key System could not be installed or updated.";
-                    break;
-                case 3:
-                    code = MediaPlayer.dependencies.ErrorHandler.prototype.MEDIA_KEYERR_SERVICE;
-                    msg = "The message passed into update indicated an error from the license service.";
-                    break;
-                case 4:
-                    code = MediaPlayer.dependencies.ErrorHandler.prototype.MEDIA_KEYERR_OUTPUT;
-                    msg = "There is no available output device with the required characteristics for the content protection system.";
-                    break;
-                case 5:
-                    code = MediaPlayer.dependencies.ErrorHandler.prototype.MEDIA_KEYERR_HARDWARECHANGE;
-                    msg += "A hardware configuration change caused a content protection error.";
-                    break;
-                case 6:
-                    code = MediaPlayer.dependencies.ErrorHandler.prototype.MEDIA_KEYERR_DOMAIN;
-                    msg = "An error occurred in a multi-device domain licensing configuration. The most common error is a failure to join the domain.";
-                    break;
+            if (event.errorCode) {
+                switch (event.errorCode.code) {
+                    case 1:
+                        code = MediaPlayer.dependencies.ErrorHandler.prototype.MEDIA_KEYERR_UNKNOWN;
+                        msg = "An unspecified error occurred. This value is used for errors that don't match any of the other codes.";
+                        break;
+                    case 2:
+                        code = MediaPlayer.dependencies.ErrorHandler.prototype.MEDIA_KEYERR_CLIENT;
+                        msg = "The Key System could not be installed or updated.";
+                        break;
+                    case 3:
+                        code = MediaPlayer.dependencies.ErrorHandler.prototype.MEDIA_KEYERR_SERVICE;
+                        msg = "The message passed into update indicated an error from the license service.";
+                        break;
+                    case 4:
+                        code = MediaPlayer.dependencies.ErrorHandler.prototype.MEDIA_KEYERR_OUTPUT;
+                        msg = "There is no available output device with the required characteristics for the content protection system.";
+                        break;
+                    case 5:
+                        code = MediaPlayer.dependencies.ErrorHandler.prototype.MEDIA_KEYERR_HARDWARECHANGE;
+                        msg += "A hardware configuration change caused a content protection error.";
+                        break;
+                    case 6:
+                        code = MediaPlayer.dependencies.ErrorHandler.prototype.MEDIA_KEYERR_DOMAIN;
+                        msg = "An error occurred in a multi-device domain licensing configuration. The most common error is a failure to join the domain.";
+                        break;
+                }
             }
             if (event.systemCode) {
                 msg += "  (System Code = " + event.systemCode + ")";
@@ -137,6 +140,7 @@ MediaPlayer.models.ProtectionModel_3Feb2014 = function () {
                 // These events are translated into our API-independent versions of the
                 // same events
                 handleEvent: function(event) {
+                    $('#mxd-content-player').append('DRM: 3Feb2014: mediakeysession event:' + event.type);
                     switch (event.type) {
 
                         case api.error:
@@ -144,7 +148,7 @@ MediaPlayer.models.ProtectionModel_3Feb2014 = function () {
                             break;
 
                         case api.message:
-                            var message = ArrayBuffer.isView(event.message) ? event.message.buffer : event.message;
+                            var message = event.message.buffer;
                             self.notify(MediaPlayer.models.ProtectionModel.eventList.ENAME_KEY_MESSAGE,
                                     new MediaPlayer.vo.protection.KeyMessage(this, message, event.destinationURL));
                             break;

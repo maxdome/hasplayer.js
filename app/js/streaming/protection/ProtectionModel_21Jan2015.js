@@ -110,12 +110,13 @@ MediaPlayer.models.ProtectionModel_21Jan2015 = function () {
 
                         case "encrypted":
                             self.debug.log("[DRM][PM_21Jan2015] 'encrypted' event");
+                            self.debug.log("[DRM][PM_21Jan2015] trigger 'needkey' event");
                             // this code is commented as the license retrieval is done on the key initialisation
-                            // if (event.initData) {
-                            //     var initData = ArrayBuffer.isView(event.initData) ? event.initData.buffer : event.initData;
-                            //     self.notify(MediaPlayer.models.ProtectionModel.eventList.ENAME_NEED_KEY,
-                            //             new MediaPlayer.vo.protection.NeedKey(initData, event.initDataType));
-                            // }
+                             if (event.initData) {
+                                 var initData = ArrayBuffer.isView(event.initData) ? event.initData.buffer : event.initData;
+                                 self.notify(MediaPlayer.models.ProtectionModel.eventList.ENAME_NEED_KEY,
+                                         new MediaPlayer.vo.protection.NeedKey(initData, event.initDataType));
+                             }
                         break;
 
                         case "waitingforkey":

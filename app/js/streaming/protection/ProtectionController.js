@@ -249,6 +249,7 @@ MediaPlayer.dependencies.ProtectionController = function() {
                 messageType;
 
             keyMessage = e.data;
+            this.debug.log("[DRM] Key message: type = " + String.fromCharCode.apply(null, new Uint8Array(keyMessage.message)));
             messageType = (keyMessage.messageType) ? keyMessage.messageType : "license-request";
             this.debug.log("[DRM] Key message: type = " + messageType);
 
@@ -297,6 +298,7 @@ MediaPlayer.dependencies.ProtectionController = function() {
 
             // Determine license server URL
             var url = null;
+            console.log('### DRM: protData', protData);
             if (protData) {
                 if (protData.serverURL) {
                     var serverURL = protData.serverURL;
@@ -340,6 +342,7 @@ MediaPlayer.dependencies.ProtectionController = function() {
                     self.debug.log("[DRM] Received license response");
                     needFailureReport = false;
                     licenseMessage = licenseServerData.getLicenseMessage(this.response, keySystemString, messageType);
+                    self.debug.log("[DRM] Received license message is: " + String.fromCharCode.apply(null, new Uint8Array(licenseMessage)));
                     if (licenseMessage !== null) {
                         needFailureReport = false;
                         self.protectionModel.updateKeySession(sessionToken, licenseMessage);
@@ -390,13 +393,13 @@ MediaPlayer.dependencies.ProtectionController = function() {
                 xhrLicense.withCredentials = true;
             }
 
-            this.debug.log("[DRM] Send license request");
+            this.debug.log("[DRM] Send license request");/*
             var licenseRequest = this.keySystem.getLicenseRequestFromMessage(message);
             if (licenseRequest === null) {
                 this.notify(MediaPlayer.dependencies.ProtectionController.eventList.ENAME_PROTECTION_ERROR,
                     new MediaPlayer.vo.Error(MediaPlayer.dependencies.ErrorHandler.prototype.MEDIA_KEYMESSERR_NO_CHALLENGE, "No license challenge from CDM key message"));
-            }
-            xhrLicense.send(this.keySystem.getLicenseRequestFromMessage(message));
+            }*/
+            xhrLicense.send(message);
         },
 
         onNeedKey = function(event) {
@@ -416,10 +419,10 @@ MediaPlayer.dependencies.ProtectionController = function() {
             // Some browsers return initData as Uint8Array (IE), some as ArrayBuffer (Chrome).
             // Convert to ArrayBuffer
             abInitData = event.data.initData;
-            if (ArrayBuffer.isView(abInitData)) {
-                abInitData = abInitData.buffer;
-            }
-
+            //if (ArrayBuffer.isView(abInitData)) {
+            //    abInitData = abInitData.buffer;
+            //}
+            self.debug.log('[DRM] initData:', String.fromCharCode.apply(null, new Uint8Array(abInitData)));
             supportedKS = this.protectionExt.getSupportedKeySystems(abInitData);
             if (supportedKS.length === 0) {
                 self.debug.log("[DRM] Received needkey event with initData, but we don't support any of the key systems!");
@@ -441,7 +444,7 @@ MediaPlayer.dependencies.ProtectionController = function() {
 
         onKeySessionCreated = function(event) {
             if (!event.error) {
-                this.debug.log("[DRM] Session created.  SessionID = " + event.data.getSessionID());
+                this.debug.log("[DRM] Session created.  SessionID = " + JSON.stringify(event.data));//event.data.getSessionID());
             } else {
                 this.debug.error("[DRM] Failed to create key session");
                 this.notify(MediaPlayer.dependencies.ProtectionController.eventList.ENAME_PROTECTION_ERROR,

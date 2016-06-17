@@ -20,16 +20,22 @@ MediaPlayer.di.Context = function () {
 
         /* @if PROTECTION=true */
         // Detect EME APIs.  Look for newest API versions first
+        //this.system.mapSingleton('protectionModel', MediaPlayer.models.ProtectionModel_21Jan2015);/*
+        //this.system.mapClass('protectionModel', MediaPlayer.models.ProtectionModel_3Feb2014);/*
+        this.system.mapClass('protectionModel', MediaPlayer.models.ProtectionModel_01b);/*
         if (MediaPlayer.models.ProtectionModel_21Jan2015.detect(videoElement)) {
+            console.log("######### DRM: ProtectionModel_21Jan2015");
             this.system.mapSingleton('protectionModel', MediaPlayer.models.ProtectionModel_21Jan2015);
         } else if (MediaPlayer.models.ProtectionModel_3Feb2014.detect(videoElement)) {
+            console.log("######### DRM: ProtectionModel_3Feb2014");
             this.system.mapClass('protectionModel', MediaPlayer.models.ProtectionModel_3Feb2014);
         } else if (MediaPlayer.models.ProtectionModel_01b.detect(videoElement)) {
+            console.log("######### DRM: ProtectionModel_01b");
             this.system.mapClass('protectionModel', MediaPlayer.models.ProtectionModel_01b);
         } else {
-            debug.log("No supported version of EME detected on this user agent!");
-            debug.log("Attempts to play encrypted content will fail!");
-        }
+            console.log("No supported version of EME detected on this user agent!");
+            console.log("Attempts to play encrypted content will fail!");
+        }*/
         /* @endif */
     };
 

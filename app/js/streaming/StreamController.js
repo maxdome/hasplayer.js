@@ -480,7 +480,10 @@ MediaPlayer.dependencies.StreamController = function() {
 
             self.manifestLoader.load(url).then(
                 function(manifest) {
+                    self.debug.info("[StreamController] Manifest has loaded11111.");
                     self.manifestModel.setValue(manifest);
+                    self.debug.info("[StreamController] Manifest has loaded22222.");
+                    console.log('### metricsModel:', self.metricsModel);
                     //ORANGE : add Metadata metric
                     self.metricsModel.addMetaData();
                     self.debug.info("[StreamController] Manifest has loaded.");
@@ -488,6 +491,7 @@ MediaPlayer.dependencies.StreamController = function() {
                     self.manifestUpdater.start();
                 },
                 function(err) {
+                    self.debug.info("[StreamController] Manifest has loaded NOT LOADED!!!!!!!!!!!!!!!.", err);
                     // err is undefined in the case the request has been aborted
                     if (err) {
                         self.errHandler.sendError(err.name, err.message, err.data);
